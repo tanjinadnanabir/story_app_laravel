@@ -40,5 +40,19 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
          * Logout Routes
          */
         Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+
+        /**
+         * Verification Routes
+         */
+        Route::get('/email/verify', 'VerificationController@show')->name('verification.notice');
+        Route::get('/email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify')->middleware(['signed']);
+        Route::post('/email/resend', 'VerificationController@resend')->name('verification.resend');
+    });
+
+    Route::group(['middleware' => ['auth','verified']], function() {
+        /**
+         * Dashboard Routes
+         */
+        Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
     });
 });

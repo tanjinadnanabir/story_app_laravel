@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -28,6 +29,8 @@ class RegisterController extends Controller
     public function register(RegisterRequest $request) 
     {
         $user = User::create($request->validated());
+
+        event(new Registered($user));
 
         auth()->login($user);
 
